@@ -1,0 +1,55 @@
+name: Deploy Hugo Site to GitHub Pages
+
+on:
+  # 当代码推送到主分支时触发工作流
+  push:
+    branches:
+      - main
+  workflow_dispatch:  # 允许手动触发工作流
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 检出代码
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true  # 递归检出子模块
+          fetch-depth: 0    # 获取所有历史记录
+
+      # 设置 Hugo 环境
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: '0.146.7'  # 指定具体版本
+          extended: true
+
+      # 缓存 Hugo Modules
+      - name: Cache Hugo Modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/hugo
+            resources
+          key: ${{ runner.os }}-hugo-${{ hashFiles('**/go.mod') }}
+          restore-keys: |
+            ${{ runner.os }}-hugo-
+
+      # 构建 Hugo 网站
+      - name: Build
+        run: |
+          hugo --minify --gc
+        env:
+          HUGO_ENV: production
+          HUGO_ENABLEGITINFO: true
+
+      # 部署到 GitHub Pages
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          commit_message: "Deploy Hugo site to GitHub Pages"
+          force_orphan: true  # 强制清理历史提交    
