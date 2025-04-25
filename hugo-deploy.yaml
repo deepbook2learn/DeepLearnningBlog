@@ -9,6 +9,8 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout
@@ -47,4 +49,5 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./deeplearnning_blog/public
           commit_message: "Deploy Hugo site to GitHub Pages"
-          force_orphan: true 
+          force_orphan: true
+          keep_files: false 
