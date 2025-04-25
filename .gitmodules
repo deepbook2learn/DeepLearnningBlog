@@ -1,0 +1,3 @@
+[submodule "deeplearnning_blog/themes/hugo-theme-stack"]
+	path = deeplearnning_blog/themes/hugo-theme-stack
+	url = https://github.com/CaiJimmy/hugo-theme-stack/
