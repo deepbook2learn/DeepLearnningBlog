@@ -8,7 +8,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latestubuntu-latest
     concurrency:
       group: $${{ github.workflow  github.workflow }}-$-${{ github.ref  github.ref }}
     steps:
