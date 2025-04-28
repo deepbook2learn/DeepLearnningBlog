@@ -1,4 +1,0 @@
-baseURL = 'https://wwww.deepbook2learn.github.io/DeepLearnningBlog/'
-languageCode = 'zh-cn'
-title = 'deepbook2learn'
-theme = 'hugo-theme-stack'
