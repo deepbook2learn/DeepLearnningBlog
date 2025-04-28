@@ -13,8 +13,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latestubuntu-latest
-    concurrency:
-      group: $${{ github.workflow  github.workflow }}-$-${{ github.ref  github.ref }}
     steps:
       - uses: actions/checkout@v4
         with:
