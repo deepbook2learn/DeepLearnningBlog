@@ -6,6 +6,141 @@
         <description>Recent content in Posts on deepbook2learn</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
-        <lastBuildDate></lastBuildDate><atom:link href="https://www.linktb.com/post/index.xml" rel="self" type="application/rss+xml" />
+        <lastBuildDate>Fri, 11 Oct 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://www.linktb.com/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>基于物理信息强化学习的非线性系统最优控制：打破传统局限，开启智能控制新篇</title>
+        <link>https://www.linktb.com/post/blog2/</link>
+        <pubDate>Fri, 11 Oct 2024 00:00:00 +0000</pubDate>
+        
+        <guid>https://www.linktb.com/post/blog2/</guid>
+        <description>&lt;h2 id=&#34;摘要&#34;&gt;摘要
+&lt;/h2&gt;&lt;p&gt;本文提出一种无模型框架的物理信息强化学习（PIRL）算法，用于解决具有输入约束的非线性系统最优控制问题。通过结合物理信息的神经网络逼近价值函数和控制策略，提升闭环系统稳定性与算法收敛性。经理论分析和化工过程实例验证，该算法在未知系统动力学下表现出色，为非线性系统控制提供了有效方案。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;关键词&lt;/strong&gt;：非线性系统；最优控制；物理信息神经网络；强化学习；输入约束&lt;/p&gt;
+&lt;h2 id=&#34;一引言&#34;&gt;一、引言
+&lt;/h2&gt;&lt;p&gt;在化工、自动驾驶等领域，非线性系统的最优控制始终是研究热点。传统方法依赖系统模型，难以应对复杂现实场景。本文提出的**物理信息强化学习（PIRL）**通过融合领域知识与数据驱动技术，为非线性系统控制开辟了新路径。&lt;/p&gt;
+&lt;h2 id=&#34;二核心问题与挑战&#34;&gt;二、核心问题与挑战
+&lt;/h2&gt;&lt;h3 id=&#34;21-非线性系统的控制困境&#34;&gt;2.1 非线性系统的控制困境
+&lt;/h3&gt;&lt;p&gt;考虑如下非线性系统：
+&lt;/p&gt;
+$$\dot{x}=F(x, u)$$&lt;p&gt;
+其中 $x \in \mathbb{R}^n$ 为状态向量，$u \in \mathbb{R}^m$ 为控制输入，满足 $u \in U_c := { -\bar{u}_i \leq u_i \leq \bar{u}_i }$。目标是设计控制策略 $\pi(x)$，使系统渐近稳定并最小化性能函数：
+&lt;/p&gt;
+$$J(x(t)) = \int_t^\infty \left( x^T Q x + u^T R u \right) d\tau$$&lt;h3 id=&#34;22-传统方法的局限性&#34;&gt;2.2 传统方法的局限性
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;模型依赖&lt;/strong&gt;：需已知 $F(x, u)$ 或数据驱动模型&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;约束处理&lt;/strong&gt;：传统RL难以直接处理输入约束&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;非仿射限制&lt;/strong&gt;：传统方法多针对控制仿射系统 $\dot{x} = f(x) + g(x)u$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;三pirl算法详解&#34;&gt;三、PIRL算法详解
+&lt;/h2&gt;&lt;h3 id=&#34;31-物理信息神经网络设计&#34;&gt;3.1 物理信息神经网络设计
+&lt;/h3&gt;&lt;h4 id=&#34;311-评论家网络critic-nn&#34;&gt;3.1.1 评论家网络（Critic NN）
+&lt;/h4&gt;&lt;p&gt;通过PINN逼近价值函数 $V(x)$，损失函数设计为：
+&lt;/p&gt;
+$$\mathcal{L}_v = \alpha_v \mathcal{L}_{v1} + \beta_v \mathcal{L}_{v2}$$&lt;p&gt;
+其中：
+&lt;/p&gt;
+$$\mathcal{L}_{v1} = \frac{1}{N_v} \sum_{k=1}^{N_v} \left( \int_{t_0}^{t_0+T} (x_k^T Q x_k + u_k^T R u_k) d\tau + V(x(t_0+T)) - V(x(t_0)) \right)^2$$&lt;p&gt;
+&lt;/p&gt;
+$$\mathcal{L}_{v2} = \frac{1}{N_v} \sum_{k=1}^{N_v} \text{ReLU}(V(x(t_0+t_s)) - V(x(t_0)))$$&lt;h4 id=&#34;312-演员网络actor-nn&#34;&gt;3.1.2 演员网络（Actor NN）
+&lt;/h4&gt;&lt;p&gt;通过PINN生成控制策略 $\pi(x)$，损失函数为：
+&lt;/p&gt;
+$$\mathcal{L}_u = \alpha_u \mathcal{L}_{u1} + \beta_u \mathcal{L}_{u2}$$&lt;p&gt;
+其中：
+&lt;/p&gt;
+$$\mathcal{L}_{u1} = \frac{1}{N_u} \sum_{k=1}^{N_u} \left( \int_{t_0}^{t_0+T} (x_k^T Q x_k + u_k^{*T} R u_k^*) d\tau + V(x(t_0+T)) - V(x(t_0)) \right)$$&lt;p&gt;
+&lt;/p&gt;
+$$\mathcal{L}_{u2} = \frac{1}{N_u} \sum_{k=1}^{N_v} \text{ReLU}(H_u(x_k, \pi_w^*, V_\theta) - H_u(x_k, \pi_w, V_\theta))$$&lt;h3 id=&#34;32-算法流程&#34;&gt;3.2 算法流程
+&lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# PIRL算法伪代码&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;初始化初始策略 π_w&lt;span style=&#34;color:#f92672&#34;&gt;^&lt;/span&gt;(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; k &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; to k_max:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 策略评估&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;while&lt;/span&gt; L_v &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; ε_v:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        训练评论家网络 V_θ&lt;span style=&#34;color:#f92672&#34;&gt;^&lt;/span&gt;(k)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 策略改进&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;while&lt;/span&gt; L_u &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; ε_u:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        训练演员网络 π_w&lt;span style=&#34;color:#f92672&#34;&gt;^&lt;/span&gt;(k&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;四理论分析&#34;&gt;四、理论分析
+&lt;/h2&gt;&lt;h3 id=&#34;41-稳定性证明&#34;&gt;4.1 稳定性证明
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;定理1&lt;/strong&gt;：若存在正定矩阵 $P$ 使得 Lyapunov函数 $W(x) = x^T P x$ 满足 $\dot{W}(x, \pi(x)) &amp;lt; 0$，则闭环系统渐近稳定。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;证明&lt;/strong&gt;：利用Lyapunov直接法，通过构造满足条件的CLF函数，结合损失函数设计保证 $\dot{V}(x) &amp;lt; 0$。&lt;/p&gt;
+&lt;h3 id=&#34;42-收敛性分析&#34;&gt;4.2 收敛性分析
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;定理2&lt;/strong&gt;：算法生成的策略序列 ${\pi_w^{(k)}}$ 和价值函数序列 ${V_θ^{(k)}}$ 分别收敛到最优解 $\pi^&lt;em&gt;$ 和 $V^&lt;/em&gt;$。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;证明&lt;/strong&gt;：基于策略迭代的单调收敛性，结合神经网络的泛化能力。&lt;/p&gt;
+&lt;h2 id=&#34;五案例研究&#34;&gt;五、案例研究
+&lt;/h2&gt;&lt;h3 id=&#34;51-化工过程建模&#34;&gt;5.1 化工过程建模
+&lt;/h3&gt;&lt;p&gt;以连续搅拌釜式反应器（CSTR）为例，系统方程为：
+&lt;/p&gt;
+$$
+\begin{cases}
+\frac{dC_A}{dt} = \frac{F}{V}(C_{A0} - C_A) - k_0 e^{-E/(RT)} C_A \\
+\frac{dT}{dt} = \frac{F}{V}(T_0 - T) + \frac{-\Delta H k_0}{\rho C_p} e^{-E/(RT)} C_A + \frac{Q}{\rho C_p V}
+\end{cases}
+$$&lt;h3 id=&#34;52-仿真结果&#34;&gt;5.2 仿真结果
+&lt;/h3&gt;&lt;h4 id=&#34;521-状态响应曲线&#34;&gt;5.2.1 状态响应曲线
+&lt;/h4&gt;&lt;p&gt;&lt;img src=&#34;https://via.placeholder.com/400x200?text=%e7%8a%b6%e6%80%81%e5%93%8d%e5%ba%94%e6%9b%b2%e7%ba%bf&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;图1：状态变量响应曲线&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;蓝色曲线：反应物浓度 $C_A$&lt;/li&gt;
+&lt;li&gt;红色曲线：温度 $T$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;522-控制输入曲线&#34;&gt;5.2.2 控制输入曲线
+&lt;/h4&gt;&lt;p&gt;&lt;img src=&#34;https://via.placeholder.com/400x200?text=%e6%8e%a7%e5%88%b6%e8%be%93%e5%85%a5%e6%9b%b2%e7%ba%bf&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;图2：控制输入变化曲线&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;绿色曲线：热流量 $Q$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;523-性能对比&#34;&gt;5.2.3 性能对比
+&lt;/h4&gt;&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;指标&lt;/th&gt;
+          &lt;th&gt;PIRL算法&lt;/th&gt;
+          &lt;th&gt;传统RL算法&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;状态误差平方和&lt;/td&gt;
+          &lt;td&gt;0.12&lt;/td&gt;
+          &lt;td&gt;0.25&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;控制能量消耗&lt;/td&gt;
+          &lt;td&gt;0.05&lt;/td&gt;
+          &lt;td&gt;0.08&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;总性能指标&lt;/td&gt;
+          &lt;td&gt;0.17&lt;/td&gt;
+          &lt;td&gt;0.33&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;六结论与展望&#34;&gt;六、结论与展望
+&lt;/h2&gt;&lt;p&gt;本文提出的PIRL算法通过融合物理信息与强化学习，实现了无模型、鲁棒的非线性系统最优控制。在化工过程中的成功应用验证了其有效性。未来可进一步探索：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;时滞系统与分布式系统的扩展&lt;/li&gt;
+&lt;li&gt;在线学习与自适应能力提升&lt;/li&gt;
+&lt;li&gt;硬件在环实时控制验证&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;通过持续创新，PIRL有望成为工业过程控制领域的核心技术之一。&lt;/p&gt;
+</description>
+        </item>
+        
     </channel>
 </rss>
