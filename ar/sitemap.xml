@@ -2,55 +2,55 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://wwww.deepbook2learn.github.io/DeepLearnningBlog/ar/categories/</loc>
+    <loc>https://www.linktb.com/ar/categories/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="https://wwww.deepbook2learn.github.io/DeepLearnningBlog/zh-cn/categories/"
+                href="https://www.linktb.com/zh-cn/categories/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="https://wwww.deepbook2learn.github.io/DeepLearnningBlog/categories/"
+                href="https://www.linktb.com/categories/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="ar"
-                href="https://wwww.deepbook2learn.github.io/DeepLearnningBlog/ar/categories/"
+                href="https://www.linktb.com/ar/categories/"
                 />
   </url><url>
-    <loc>https://wwww.deepbook2learn.github.io/DeepLearnningBlog/ar/tags/</loc>
+    <loc>https://www.linktb.com/ar/tags/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="https://wwww.deepbook2learn.github.io/DeepLearnningBlog/zh-cn/tags/"
+                href="https://www.linktb.com/zh-cn/tags/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="https://wwww.deepbook2learn.github.io/DeepLearnningBlog/tags/"
+                href="https://www.linktb.com/tags/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="ar"
-                href="https://wwww.deepbook2learn.github.io/DeepLearnningBlog/ar/tags/"
+                href="https://www.linktb.com/ar/tags/"
                 />
   </url><url>
-    <loc>https://wwww.deepbook2learn.github.io/DeepLearnningBlog/ar/</loc>
+    <loc>https://www.linktb.com/ar/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="https://wwww.deepbook2learn.github.io/DeepLearnningBlog/zh-cn/"
+                href="https://www.linktb.com/zh-cn/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="https://wwww.deepbook2learn.github.io/DeepLearnningBlog/"
+                href="https://www.linktb.com/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="ar"
-                href="https://wwww.deepbook2learn.github.io/DeepLearnningBlog/ar/"
+                href="https://www.linktb.com/ar/"
                 />
   </url>
 </urlset>
