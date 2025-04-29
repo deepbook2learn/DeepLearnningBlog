@@ -26,7 +26,7 @@ jobs:
           extended: true
 
       - name: Build
-        run: hugo --minify
+        run: hugo  
         working-directory: . # 注意修改成你使用hugo创建的项目名称
 
       - name: Deploy
